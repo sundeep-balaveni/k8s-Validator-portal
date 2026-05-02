@@ -2,18 +2,7 @@
 # # This manifest file contains the configuration for the cart application, including a ConfigMap for database configuration, a Deployment for the application, and a Service to expose it.
 
 
----
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: database-photoshop
-  labels:
-    project: roboshop
-    environment: dev
-    purpose: poc
-
----
 
 
 apiVersion: v1
