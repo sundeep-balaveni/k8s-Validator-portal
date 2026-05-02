@@ -86,7 +86,7 @@ spec:
           # pass the environment variables to the application using configmap
           envFrom:
             - configMapRef:
-                name: Database-config
+                name: database-config
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
