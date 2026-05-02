@@ -14,7 +14,7 @@ data:
   
   MYSQL_ROOT_PASSWORD: rootpassword
   MYSQL_DATABASE: photoshop_db
-  MYSQL_USER: root
+  
 
 ---
 
