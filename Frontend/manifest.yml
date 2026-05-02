@@ -37,7 +37,7 @@ metadata:
     environment: prod
     purpose: poc
   annotations:
-    kubernetes.io/change-cause: "v1 frontend deployment"
+    kubernetes.io/change-cause: "v2 frontend deployment"
     # the namespace in which the deployment will be created
 
 spec:
