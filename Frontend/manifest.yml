@@ -1,0 +1,144 @@
+
+
+# # This manifest file contains the configuration for the cart application, including a ConfigMap for database configuration, a Deployment for the application, and a Service to expose it.
+
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: db-config
+#   namespace: frontend
+# data:
+#   CATALOGUE_HOST: "cart-svc"
+#   CATALOGUE_PORT: "8080"
+#   REDIS_HOST: "redis"
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frontend-photoshop
+  labels:
+    project: roboshop
+    environment: dev
+    purpose: poc
+
+---
+
+#deployment for cart application
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-photoshop-deployment
+  namespace: frontend
+  labels:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+
+  annotations:
+    kubernetes.io/change-cause: "v1 frontend deployment"
+
+    # the namespace in which the deployment will be created 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+               # the selector to match the labels of the pods created by this deployment
+      
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+
+# the pod template
+
+  template:
+    metadata:
+      labels:
+      
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+    spec:
+      containers:
+      - name: cart
+        image: sandeep0109/photobooth:frontend-2.2.2
+
+# always pull the image to ensure we get the latest version of the application
+
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+# resource limits and requests for the container
+
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+
+# pass the environment variables to the application using configmap
+
+        # envFrom:
+        # - configMapRef:
+        #     name: db-config
+
+
+#check the health of the application using readiness probe
+        
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          tcpSocket:
+            port: 80
+
+
+#check the health of the application using liveness probe
+
+        livenessProbe:
+          exec:
+            command:
+              - /tmp/healthy
+          periodSeconds: 10
+          failureThreshold: 3
+        
+
+---
+
+#nodeport service
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: photoshop-service
+  namespace: frontend
+  labels:
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+
+spec:
+  type: NodePort 
+  selector:
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+  ports:
+  - protocol: TCP
+    port: 80  #service port
+    targetPort: 80 #container port
+    nodePort: 30007
