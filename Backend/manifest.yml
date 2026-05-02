@@ -1,0 +1,140 @@
+
+# # This manifest file contains the configuration for the cart application, including a ConfigMap for database configuration, a Deployment for the application, and a Service to expose it.
+
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: Backend-config
+#   namespace: Backend-photoshop
+# data:
+#   DB_HOST: database
+#   DB_USER: root
+#   DB_PASSWORD: rootpassword
+#   DB_NAME: photoshop_db
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend-photoshop
+  labels:
+    project: roboshop
+    environment: dev
+    purpose: poc
+
+---
+
+# deployment for cart application
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-photoshop-deployment
+  namespace: Backend-photoshop
+  labels:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+  annotations:
+    kubernetes.io/change-cause: "v1 backend deployment"
+    # the namespace in which the deployment will be created
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # the selector to match the labels of the pods created by this deployment
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+
+  # the pod template
+  template:
+    metadata:
+      labels:
+        app: photoshop
+        project: photoshop
+        environment: prod
+        purpose: poc
+    spec:
+      containers:
+        - name: cart
+          image: sandeep0109/photobooth:backend-2.2.2
+
+          # always pull the image to ensure we get the latest version of the application
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+          # resource limits and requests for the container
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+
+          # pass the environment variables to the application using configmap
+          envFrom:
+            - configMapRef:
+                name: Backend-config
+
+          # volumeMounts:
+          #   - name: backend-config-volume   #in your code your app should read the enc =v from this path 
+          #     mountPath: /app/config
+
+          # check the health of the application using readiness probe
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            # tcpSocket:
+            #   port: 80
+
+          # check the health of the application using liveness probe
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+      # volumes:
+      #   - name: backend-config-volume
+      #     configMap:
+      #       name: Backend-config
+
+---
+
+# nodeport service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: photoshop-service
+  namespace: Backend-photoshop
+  labels:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+
+spec:
+  type: NodePort
+  selector:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+
+  ports:
+    - protocol: TCP
+      port: 80          # service port
+      targetPort: 80    # container port
+      nodePort: 30008
