@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - name: cart
-          image: sandeep0109/photobooth:frontend-2.2.2
+          image: sandeep0109/photobooth-k8s:frontend-2.2.2
 
           # always pull the image to ensure we get the latest version of the application
           imagePullPolicy: Always

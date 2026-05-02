@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - name: database
-          image: sandeep0109/photobooth:database-2.2.2
+          image: sandeep0109/photobooth-k8s:database-2.2.2
 
           # always pull the image to ensure we get the latest version of the application
           imagePullPolicy: Always
