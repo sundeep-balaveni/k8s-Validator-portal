@@ -16,6 +16,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ebs-static
+  namespace: database-photoshop
 spec:
   storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
   volumeName: ebs-static # This is  the PV name
