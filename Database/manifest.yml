@@ -107,7 +107,13 @@ spec:
       #   - name: backend-config-volume
       #     configMap:
       #       name: Backend-config
+      nodeSelector:
+        topology.kubernetes.io/zone: us-east-1c
 
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: ebc-static
 ---
 
 # nodeport service
