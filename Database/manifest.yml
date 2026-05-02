@@ -1,15 +1,6 @@
 
 # # This manifest file contains the configuration for the cart application, including a ConfigMap for database configuration, a Deployment for the application, and a Service to expose it.
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: Database-config
-  namespace: database-photoshop
-data:
-  
-  MYSQL_ROOT_PASSWORD: rootpassword
-  MYSQL_DATABASE: photoshop_db
 
 ---
 
@@ -21,6 +12,20 @@ metadata:
     project: roboshop
     environment: dev
     purpose: poc
+
+---
+
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+  namespace: database-photoshop
+data:
+  
+  MYSQL_ROOT_PASSWORD: rootpassword
+  MYSQL_DATABASE: photoshop_db
+  MYSQL_USER: root
 
 ---
 
@@ -82,6 +87,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: Database-config
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
 
           # volumeMounts:
           #   - name: backend-config-volume   #in your code your app should read the enc =v from this path 
@@ -113,7 +121,7 @@ spec:
       volumes:
         - name: mysql-data
           persistentVolumeClaim:
-            claimName: ebc-static
+            claimName: ebs-static
 ---
 
 # nodeport service
