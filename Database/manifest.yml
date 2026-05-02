@@ -16,7 +16,7 @@ data:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: Database-photoshop
+  name: database-photoshop
   labels:
     project: roboshop
     environment: dev
@@ -30,7 +30,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: database-photoshop-deployment
-  namespace: Database-photoshop
+  namespace: database-photoshop
   labels:
     app: photoshop
     project: photoshop
@@ -122,7 +122,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: database
-  namespace: Database-photoshop
+  namespace: database-photoshop
   labels:
     app: photoshop
     project: photoshop
