@@ -90,8 +90,8 @@ spec:
               port: 80
             failureThreshold: 3
             initialDelaySeconds: 15
-            tcpSocket:
-              port: 80
+            # tcpSocket:
+            #   port: 80
 
           # check the health of the application using liveness probe
           livenessProbe:
