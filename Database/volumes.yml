@@ -40,7 +40,7 @@ metadata:
   namespace: database-photoshop
 spec:
   storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumename: ebs-static-photoshop # This is  the PV name
+  volumeName: ebs-static-photoshop # This is  the PV name
   
   accessModes:
     - ReadWriteOnce
