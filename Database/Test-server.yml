@@ -1,5 +1,21 @@
 ---
 
+
+
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+  namespace: database-photoshop
+data:
+  
+  MYSQL_ROOT_PASSWORD: rootpassword
+  MYSQL_DATABASE: photoshop_db
+  
+---
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,7 +59,10 @@ spec:
           # volumeMounts:
           #   - name: mysql-data
           #     mountPath: /data
-
+          envFrom:  
+            - configMapRef:   
+              name: database-config
+          
       nodeSelector:
         topology.kubernetes.io/zone: us-east-1b
 
