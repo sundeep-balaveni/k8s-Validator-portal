@@ -66,10 +66,10 @@ spec:
           # resource limits and requests for the container
           resources:
             limits:
-              memory: "128Mi"
+              memory: "1Gi"
               cpu: "500m"
             requests:
-              memory: "64Mi"
+              memory: "512Mi"
               cpu: "250m"
 
           # pass the environment variables to the application using configmap
