@@ -37,12 +37,12 @@ spec:
         - name: database
           # image: busybox
           image: sandeep0109/photobooth-k8s:database-2.2.2
-          command: ["sleep", "3600" ]
+          # command: ["sleep", "3600" ]
           # always pull the image to ensure we get the latest version of the application
           imagePullPolicy: Always
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /data
+          # volumeMounts:
+          #   - name: mysql-data
+          #     mountPath: /data
 
       nodeSelector:
         topology.kubernetes.io/zone: us-east-1b
