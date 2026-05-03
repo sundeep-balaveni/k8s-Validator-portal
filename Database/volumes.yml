@@ -15,21 +15,21 @@ metadata:
 
 
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: ebs-static-photoshop
-  namespace: database-photoshop
-spec:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 2Gi # should be less than or equal to your disk size
-  csi:
-    driver: ebs.csi.aws.com
-    fsType: ext4
-    volumeHandle: vol-01c2262c448640a5b
-  persistentVolumeReclaimPolicy: Retain
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: ebs-static-photoshop
+#   namespace: database-photoshop
+# spec:
+#   accessModes:
+#   - ReadWriteOnce
+#   capacity:
+#     storage: 2Gi # should be less than or equal to your disk size
+#   csi:
+#     driver: ebs.csi.aws.com
+#     fsType: ext4
+#     volumeHandle: vol-01c2262c448640a5b
+#   persistentVolumeReclaimPolicy: Retain
 
 
 ---
@@ -39,8 +39,8 @@ metadata:
   name: ebs-static-photoshop
   namespace: database-photoshop
 spec:
-  storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumeName: ebs-static-photoshop # This is  the PV name
+  storageClassName: "photoshop-sc-ebs" # Empty string must be explicitly set otherwise default StorageClass will be set
+  # volumeName: ebs-static-photoshop # This is  the PV name
   
   accessModes:
     - ReadWriteOnce
