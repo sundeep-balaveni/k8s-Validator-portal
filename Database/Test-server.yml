@@ -1,0 +1,144 @@
+
+# # This manifest file contains the configuration for the cart application, including a ConfigMap for database configuration, a Deployment for the application, and a Service to expose it.
+
+
+
+
+
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: database-config
+#   namespace: database-photoshop
+# data:
+  
+#   MYSQL_ROOT_PASSWORD: rootpassword
+#   MYSQL_DATABASE: photoshop_db
+  
+
+---
+
+# deployment for cart application
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-photoshop-deployment
+  namespace: database-photoshop
+  labels:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+  annotations:
+    kubernetes.io/change-cause: "v1 Database deployment"
+    # the namespace in which the deployment will be created
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # the selector to match the labels of the pods created by this deployment
+      app: photoshop
+      project: photoshop
+      environment: prod
+      purpose: poc
+
+  # the pod template
+  template:
+    metadata:
+      labels:
+        app: photoshop
+        project: photoshop
+        environment: prod
+        purpose: poc
+    spec:
+      containers:
+        - name: database
+          image: 
+
+          # always pull the image to ensure we get the latest version of the application
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 3306
+
+          # resource limits and requests for the container
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+
+          # pass the environment variables to the application using configmap
+          envFrom:
+            - configMapRef:
+                name: database-config
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+
+          # volumeMounts:
+          #   - name: backend-config-volume   #in your code your app should read the enc =v from this path 
+          #     mountPath: /app/config
+
+          # check the health of the application using readiness probe
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            # tcpSocket:
+            #   port: 80
+
+          # check the health of the application using liveness probe
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+      # volumes:
+      #   - name: backend-config-volume
+      #     configMap:
+      #       name: Backend-config
+      nodeSelector:
+        topology.kubernetes.io/zone: us-east-1b
+
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: ebs-static-photoshop
+---
+
+# nodeport service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: database-photoshop
+  labels:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+
+spec:
+  type: ClusterIP
+  selector:
+    app: photoshop
+    project: photoshop
+    environment: prod
+    purpose: poc
+
+  ports:
+    - protocol: TCP
+      port: 3306         # service port
+      targetPort: 3306    # container port
+
+
+
+
