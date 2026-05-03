@@ -7,9 +7,9 @@ metadata:
   namespace: database-photoshop
   labels:
     app: photoshop-database-test-server
-    project: photoshop
-    environment: prod
-    purpose: poc
+    project: photoshop-test
+    environment: prod-test
+    purpose: poc-test
   annotations:
     kubernetes.io/change-cause: "v1 Database deployment"
     # the namespace in which the deployment will be created
@@ -20,18 +20,18 @@ spec:
     matchLabels:
       # the selector to match the labels of the pods created by this deployment
       app: photoshop-database-test-server
-      project: photoshop
-      environment: prod
-      purpose: poc
+      project: photoshop-test
+      environment: prod-test
+      purpose: poc-test
 
   # the pod template
   template:
     metadata:
       labels:
         app: photoshop-database-test-server
-        project: photoshop
-        environment: prod
-        purpose: poc
+        project: photoshop-test
+        environment: prod-test
+        purpose: poc-test
     spec:
       containers:
         - name: database
