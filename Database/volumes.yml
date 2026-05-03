@@ -38,6 +38,7 @@ metadata:
 spec:
   storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
   volumeName: ebs-static # This is  the PV name
+  persistentVolumeReclaimPolicy: Delete
   accessModes:
     - ReadWriteOnce
   resources:
