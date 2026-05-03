@@ -18,7 +18,7 @@ metadata:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ebs-static
+  name: ebs-static-photoshop
   namespace: database-photoshop
 spec:
   accessModes:
@@ -28,17 +28,19 @@ spec:
   csi:
     driver: ebs.csi.aws.com
     fsType: ext4
-    volumeHandle: vol-061ec79f3cf7be181
-  persistentVolumeReclaimPolicy: Retain
+    volumeHandle: vol-01c2262c448640a5b
+  persistentVolumeReclaimPolicy: Delete
+
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ebs-static
+  name: ebs-static-photoshop
   namespace: database-photoshop
 spec:
   storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumeName: ebs-static # This is  the PV name
+  volumename: ebs-static-photoshop # This is  the PV name
   
   accessModes:
     - ReadWriteOnce

@@ -110,7 +110,7 @@ spec:
       volumes:
         - name: mysql-data
           persistentVolumeClaim:
-            claimName: ebs-static
+            claimName: ebs-static-photoshop
 ---
 
 # nodeport service
