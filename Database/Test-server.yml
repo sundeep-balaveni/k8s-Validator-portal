@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
         - name: database
-           image: busybox
+          image: busybox
           # image: sandeep0109/photobooth-k8s:database-2.2.2
           command: ["sleep", "3600" ]
           # always pull the image to ensure we get the latest version of the application
